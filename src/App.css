@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  /* Semi-negrito */
+}
+
+p,
+li {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  /* Normal */
+}
+
+li button {
+  margin-left: 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+li button:hover {
+  color: #007bff;
+}
+
+.completed {
+  color: green;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+
+#currentDate {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+h2,
+h3 {
+  color: #444;
+}
+
+input[type="text"],
+input[type="date"] {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 30%;
+}
+
+#botao-check,
+#botao-x {
+  width: 10%;
+}
+
+.formulario-inputs button:hover {
+  background-color: #0056b3;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+li {
+  background-color: #f8f9fa;
+  /* Fundo claro para cada tarefa */
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+#taskList {
+  list-style-type: none;
+  /* Remove os marcadores de lista */
+  padding: 0;
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  /* Alinha os botões e o texto verticalmente */
+  gap: 5px;
+  /* Adiciona um espaço entre os botões e o texto */
+}
+
+.taskButton {
+  padding: 2px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.taskButton:hover {
+  opacity: 0.8;
+}
+
+.taskText.completed {
+  text-decoration: line-through;
+  /* Riscado para tarefas completas */
+  color: #6c757d;
+  /* Cinza */
+}
+
+.taskButton.not-completed {
+  color: #28a745;
+  font-weight: bold;
+}
+
+#botao-x {
+  color: #c4262e;
+  font-weight: bold;
+}
+
+.taskButton.completed {
+  background-color: #28a745;
+  color: white;
+}
