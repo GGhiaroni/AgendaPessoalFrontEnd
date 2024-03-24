@@ -119,7 +119,7 @@ li {
   opacity: 0.8;
 }
 
-.taskText.completed {
+.task-completed {
   text-decoration: line-through;
   /* Riscado para tarefas completas */
   color: #6c757d;
