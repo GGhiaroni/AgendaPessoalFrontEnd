@@ -14,28 +14,56 @@ function TaskManager() {
     return dataFormatada.split(' ').map(transformarMaiuscula).join(' ');
   };
 
-  const handleAddTask = (event) => {
+  const handleAddTask = async (event) => {
     event.preventDefault(); // Previne o comportamento padrão do formulário de carregar a página após a adição de uma nova tarefa
     
-    const formatarData = (dataRecebida) => {
-      const partesData = dataRecebida.split('-');
-      const ano = parseInt(partesData[0], 10);
-      const mes = parseInt(partesData[1], 10) - 1; // Ajuste porque getMonth() começa do 0
-      const dia = parseInt(partesData[2], 10);
+
+    const dataBackEnd = (dataRecebida) => {
+      const data = new Date(dataRecebida);
+      const compensarFusoHorario = data.getTime() + (data.getTimezoneOffset() * 60000);
+      const dataCompensada = new Date(compensarFusoHorario);
     
-      const data = new Date(ano, mes, dia);
+      const ano = dataCompensada.getFullYear();
+      const mes = dataCompensada.getMonth() + 1; // getMonth() retorna um índice baseado em zero (0-11)
+      const dia = dataCompensada.getDate();
     
-      const diaFormatado = data.getDate().toString().padStart(2, '0');
-      const mesFormatado = (data.getMonth() + 1).toString().padStart(2, '0'); // getMonth() retorna 0 para janeiro, 1 para fevereiro, etc.
-      const anoFormatado = data.getFullYear();
+      const mesFormatado = mes < 10 ? `0${mes}` : mes;
+      const diaFormatado = dia < 10 ? `0${dia}` : dia;
     
-      return `${diaFormatado}/${mesFormatado}`;
+      return `${ano}-${mesFormatado}-${diaFormatado}`;
     }
     
-    const newTask = { title: taskTitle, time: formatarData(taskTime), completed: false};
-    setTasks([...tasks, newTask]); // Adiciona a nova tarefa à lista
-    setTaskTitle(''); // Limpa o campo de título
-    setTaskTime(''); // Limpa o campo de data
+    const dataParaEnviarAoBackEnd = dataBackEnd(taskTime);
+    
+    try {
+      const response = await fetch('http://localhost:8000/tarefas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: taskTitle,
+          datacriacao: dataParaEnviarAoBackEnd,
+          isfinalizada: false,
+        }),
+      });
+  
+      const novaTarefa = await response.json();
+      if (response.ok) {
+        const novaTarefaFormatada = {
+          title: novaTarefa.nome,
+          time: novaTarefa.datacriacao,
+          completed: novaTarefa.isfinalizada,
+        };
+        setTasks([...tasks, novaTarefaFormatada]);
+        setTaskTitle('');
+        setTaskTime('');
+      } else {
+        throw new Error('Falha ao adicionar a tarefa');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const toggleTaskCompletion = index => {
@@ -78,7 +106,7 @@ function TaskManager() {
         {tasks.map((task, index) => (
         <li key={index} style={{ backgroundColor: task.completed ? '#d4edda' : '' }}>
           <div className="taskItem">
-          <span className={task.completed ? 'taskText completed' : 'taskText'}>{task.time} ⋅ {task.title}</span>
+          {new Date(task.time).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} ⋅ {task.title}
               <button id="botao-check"className={`taskButton ${task.completed ? 'completed' : 'not-completed'}`} onClick={() => toggleTaskCompletion(index)}>✓</button>
               <button id="botao-x" className="taskButton" onClick={() => deleteTask(index)}>X</button>
           </div>
